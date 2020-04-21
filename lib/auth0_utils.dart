@@ -3,17 +3,17 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 
-class Utils {
+class Auth0Utils {
   static const String DOMAIN = "idee.auth0.com";
   static const String API_AUDIENCE = "https://backend-api-url.com/";
   static const String CLIENT_ID = "qX74qk34T8yHevmg8J3rOU6JuulIZ5Si";
   static const String CALLBACK_URI =
       "demo://idee.auth0.com/dev.idee.flutterauth0/callback";
   static const String SCOPES = "profile email";
-  String generatedCodeVerifier = '';
+  String _generatedCodeVerifier = '';
 
-  Utils() {
-    generatedCodeVerifier = _createCodeVerifier();
+  Auth0Utils() {
+    _generatedCodeVerifier = _createCodeVerifier();
   }
 
   String _createCodeVerifier() {
@@ -23,7 +23,7 @@ class Utils {
     return encodedString.replaceAll("=", "");
   }
 
-  String createCodeChallenge(String verifier) {
+  String _createCodeChallenge(String verifier) {
     var enc = utf8.encode(verifier);
     var challenge = sha256.convert(enc).bytes;
     String encodedString = base64UrlEncode(challenge);
@@ -31,9 +31,7 @@ class Utils {
   }
 
   getAuthURL() {
-    var codeVerifier = generatedCodeVerifier;
-    var codeChallenge = createCodeChallenge(codeVerifier);
-
+    var codeChallenge = _createCodeChallenge(_generatedCodeVerifier);
     String authorizationUrl = "https://$DOMAIN/authorize" +
         "?scope=${Uri.encodeFull(SCOPES)}" +
         "&audience=$API_AUDIENCE" +
@@ -42,11 +40,10 @@ class Utils {
         "&code_challenge=$codeChallenge" +
         "&code_challenge_method=S256" +
         "&redirect_uri=$CALLBACK_URI";
-
     return authorizationUrl;
   }
 
-  exchangeAuthCodeForToken(String authCode) async {
+  Future<String> exchangeAuthCodeForToken(String authCode) async {
     String url = "https://$DOMAIN/oauth/token";
 
     var headers = Map<String, String>();
@@ -56,13 +53,19 @@ class Utils {
     var requestBody = json.encode({
       "grant_type": "authorization_code",
       "client_id": CLIENT_ID,
-      "code_verifier": generatedCodeVerifier,
+      "code_verifier": _generatedCodeVerifier,
       "code": authCode,
       "redirect_uri": CALLBACK_URI
     });
 
     var response = await http.post(url, body: requestBody, headers: headers);
-    return response;
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      var decodedJson = json.decode(response.body);
+      return decodedJson['access_token'];
+    } else {
+      return null;
+    }
   }
 }
 // https://stackoverflow.com/questions/4492426/remove-trailing-when-base64-encoding/4492448#4492448
