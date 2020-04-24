@@ -12,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool loading = false;
+  bool isError = false;
   StreamSubscription _streamSubscription;
   Auth0Utils _auth0utils = Auth0Utils();
 
@@ -32,39 +32,46 @@ class _LoginPageState extends State<LoginPage> {
     _streamSubscription = getLinksStream().listen((String link) {
       Uri uri = Uri.parse(link);
 
-      print(uri.path);
       if (uri.queryParameters.keys.contains('code')) {
         String authCode = uri.queryParameters['code'];
         _auth0utils.exchangeAuthCodeForToken(authCode).then((token) {
+          closeWebView();
           if (token != null) {
-
           } else {
-            // error
+            setState(() {
+              isError = true;
+            });
           }
         });
       } else {
-//        value = uri.queryParameters['error'];
+        setState(() {
+          isError = true;
+        });
       }
     }, onError: (err) {
       // Handle exception by warning the user their action did not succeed
       print(err);
-      setState(() {
-        loading = false;
-      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: FlatButton(
-        onPressed: () {
-          setState(() {
-            loading = true;
-          });
-          launch(_auth0utils.getAuthURL());
-        },
-        child: Text('Login'),
+    return Scaffold(
+      body: Center(
+        child: isError
+            ? Text(
+                'Could not log in user',
+                style: TextStyle(fontSize: 16),
+              )
+            : FlatButton(
+                onPressed: () {
+                  launch(_auth0utils.getAuthURL());
+                },
+                child: Text(
+                  'Login',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
       ),
     );
   }

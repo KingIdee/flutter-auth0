@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutterauth0/auth0_utils.dart';
+import 'package:flutterauth0/login.dart';
 import 'package:uni_links/uni_links.dart';
 
 void main() => runApp(MyApp());
@@ -20,7 +21,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Container(),
+      home: LoginPage(),
     );
   }
 }

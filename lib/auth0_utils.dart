@@ -47,8 +47,7 @@ class Auth0Utils {
     String url = "https://$DOMAIN/oauth/token";
 
     var headers = Map<String, String>();
-    headers["Content-Type"] = "application/x-www-form-urlencoded";
-//    headers['Content-Type'] = 'application/json';
+    headers['Content-Type'] = 'application/json';
 
     var requestBody = json.encode({
       "grant_type": "authorization_code",
@@ -59,7 +58,7 @@ class Auth0Utils {
     });
 
     var response = await http.post(url, body: requestBody, headers: headers);
-    print(response.statusCode);
+    print(jsonDecode(response.body));
     if (response.statusCode == 200) {
       var decodedJson = json.decode(response.body);
       return decodedJson['access_token'];
