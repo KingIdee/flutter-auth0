@@ -58,7 +58,6 @@ class Auth0Utils {
     });
 
     var response = await http.post(url, body: requestBody, headers: headers);
-    print(jsonDecode(response.body));
     if (response.statusCode == 200) {
       var decodedJson = json.decode(response.body);
       return decodedJson['access_token'];
