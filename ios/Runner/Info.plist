@@ -48,7 +48,7 @@
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
         <key>CFBundleURLName</key>
-        <string>idee.auth0.com</string>
+        <string>YOUR_AUTH0_DOMAIN</string>
         <key>CFBundleURLSchemes</key>
         <array>
           <string>demo</string>

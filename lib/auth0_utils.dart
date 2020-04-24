@@ -4,11 +4,11 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 
 class Auth0Utils {
-  static const String DOMAIN = "idee.auth0.com";
-  static const String API_AUDIENCE = "https://backend-api-url.com/";
-  static const String CLIENT_ID = "qX74qk34T8yHevmg8J3rOU6JuulIZ5Si";
+  static const String DOMAIN = "YOUR_AUTH0_DOMAIN";
+  static const String API_AUDIENCE = "YOUR_API_IDENTIFIER";
+  static const String CLIENT_ID = "YOUR_NATIVE_CLIENT_ID";
   static const String CALLBACK_URI =
-      "demo://idee.auth0.com/dev.idee.flutterauth0/callback";
+      "demo://YOUR_AUTH0_DOMAIN/dev.idee.flutterauth0/callback";
   static const String SCOPES = "profile email";
   String _generatedCodeVerifier = '';
 
