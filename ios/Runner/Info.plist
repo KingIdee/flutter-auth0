@@ -42,18 +42,19 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 
+    
     <key>CFBundleURLTypes</key>
     <array>
-      <dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLName</key>
-        <string>YOUR_AUTH0_DOMAIN</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>demo</string>
-        </array>
-      </dict>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>None</string>
+            <key>CFBundleURLName</key>
+            <string>auth0</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>dev.idee.flutterauth0</string>
+            </array>
+        </dict>
     </array>
 
 
